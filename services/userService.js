@@ -2,7 +2,11 @@ const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
 
-const JWT = require('jsonwebtoken')
+// JWT
+const jwt = require('jsonwebtoken')
+const passportJWT = require('passport-jwt')
+const ExtractJwt = passportJWT.ExtractJwt
+const JwtStrategy = passportJWT.Strategy
 
 const userService = {
   async signUp (req, res, callback) {
@@ -32,6 +36,47 @@ const userService = {
       callback({
         status: 'error',
         message: '註冊失敗'
+      })
+    }
+  },
+  async signIn (req, res, callback) {
+    try {
+      if (!req.body.email || !req.body.password) {
+        return callback({
+          status: 'error',
+          message: '請輸入帳號密碼'
+        })
+      }
+      const userEmail = req.body.email
+      const password = req.body.password
+
+      const user = await User.findOne({
+        where: { email: userEmail }
+      })
+
+      if (!user) return callback({ statue: 'error', message: '使用者未註冊' })
+
+      if (!bcrypt.compareSync(password, user.password)) {
+        return callback({
+          status: 'error',
+          message: '密碼錯誤'
+        })
+      }
+
+      const payload = { id: user.id }
+      const token = jwt.sign(payload, process.env.JWT_SECRET)
+
+      return callback({
+        status: 'success',
+        message: '登入成功',
+        token: token,
+        user: user
+      })
+    } catch (err) {
+      console.log(err)
+      return callback({
+        status: 'error',
+        message: '登入失敗'
       })
     }
   }
