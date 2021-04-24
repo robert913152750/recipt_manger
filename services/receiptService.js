@@ -42,8 +42,33 @@ const receiptService = {
 
         }
 
+        const receiptGoodsObject = []
+        class Goods {
+          constructor (name, quantity, amount, total) {
+            this.name = name,
+            this.quantity = quantity,
+            this.amount = amount,
+            this.total = total
+          }
+        }
+
+        for (let i = 0; i < receiptGoodsInf.length; i++) {
+          let name = ''
+          let quantity = 0
+          let amount = 0
+          let total = 0
+          if (i % 2 !== 0) {
+            name = receiptGoodsInf[i - 1]
+            quantity = parseInt(receiptGoodsInf[i].split(' x')[0], 10)
+            amount = parseFloat(receiptGoodsInf[i].split(' ')[2])
+            total = parseFloat(receiptGoodsInf[i].split(' ').pop())
+            receiptGoodsObject.push(new Goods(name, quantity, amount, total))
+          }
+        }
+
         return callback({
-          receiptObject
+          receiptObject,
+          receiptGoodsObject
         })
       })
     } catch (err) {
