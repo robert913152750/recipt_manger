@@ -49,9 +49,9 @@ const receiptService = {
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-          this.quantity = quantity,
-          this.amount = amount,
-          this.total = total
+            this.quantity = quantity,
+            this.amount = amount,
+            this.total = total
         }
       }
 
@@ -68,6 +68,10 @@ const receiptService = {
           receiptGoodsObject.push(new Goods(name, quantity, amount, total))
         }
       }
+
+      const newReceipt = await Receipt.create({
+        receiptObject
+      })
 
       return callback({
         receiptObject,
