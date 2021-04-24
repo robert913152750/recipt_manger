@@ -31,7 +31,8 @@ const receiptService = {
 
       let time = receiptBasicInf[4].split(' ')[0].split(':')[1] + ' ' + receiptBasicInf[4].split(' ')[2].split('Time:')[1]
       time = Date.parse(time)
-      time = moment(time).format('HH:mm:ss')
+      time = date + ' ' + moment(time).format('HH:mm:ss')
+      time = moment(time).format('YYYY-MM-DD HH:mm:ss')
 
       const receiptObject = {
         merchant_name: receiptBasicInf[0],
@@ -49,9 +50,9 @@ const receiptService = {
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-            this.quantity = quantity,
-            this.amount = amount,
-            this.total = total
+          this.quantity = quantity,
+          this.amount = amount,
+          this.total = total
         }
       }
 
@@ -70,12 +71,19 @@ const receiptService = {
       }
 
       const newReceipt = await Receipt.create({
-        receiptObject
+        merchant_name: receiptObject.merchant_name,
+        tel: receiptObject.tel,
+        gst_reg: receiptObject.gst_reg,
+        date: receiptObject.date,
+        time: receiptObject.time,
+        receipt_id: receiptObject.receipt_id,
+        total: receiptObject.total,
+        gst_amount: receiptObject.gst_amount,
+        UserId: Number(req.user.dataValues.id)
       })
 
       return callback({
-        receiptObject,
-        receiptGoodsObject
+        newReceipt
       })
     } catch (err) {
       console.log(err)
