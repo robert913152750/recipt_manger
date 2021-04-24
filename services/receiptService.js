@@ -46,13 +46,13 @@ const receiptService = {
 
       }
 
-      const receiptGoodsObject = []
+      const receiptGoodsObjects = []
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-          this.quantity = quantity,
-          this.amount = amount,
-          this.total = total
+            this.quantity = quantity,
+            this.amount = amount,
+            this.total = total
         }
       }
 
@@ -66,7 +66,7 @@ const receiptService = {
           quantity = parseInt(receiptGoodsInf[i].split(' x')[0], 10)
           amount = parseFloat(receiptGoodsInf[i].split(' ')[2])
           total = parseFloat(receiptGoodsInf[i].split(' ').pop())
-          receiptGoodsObject.push(new Goods(name, quantity, amount, total))
+          receiptGoodsObjects.push(new Goods(name, quantity, amount, total))
         }
       }
 
@@ -82,8 +82,19 @@ const receiptService = {
         UserId: Number(req.user.dataValues.id)
       })
 
+      for (let i = 0; i < receiptGoodsObjects.length; i++) {
+        await ReceiptGoods.create({
+          name: receiptGoodsObjects[i].name,
+          quantity: receiptGoodsObjects[i].quantity,
+          amount: receiptGoodsObjects[i].amount,
+          total: receiptGoodsObjects[i].total,
+          ReceiptId: newReceipt.id
+        })
+      }
+
       return callback({
-        newReceipt
+        newReceipt,
+        receiptGoodsObjects
       })
     } catch (err) {
       console.log(err)
