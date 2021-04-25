@@ -51,9 +51,9 @@ const receiptService = {
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-          this.quantity = quantity,
-          this.amount = amount,
-          this.total = total
+            this.quantity = quantity,
+            this.amount = amount,
+            this.total = total
         }
       }
 
@@ -161,12 +161,21 @@ const receiptService = {
     }
   },
   async getReceipt (req, res, callback) {
-    const receipt = await Receipt.findByPk(req.params.id, {
-      include: [
-        { model: Tag }
-      ]
-    })
-    return callback({ receipt })
+    try {
+      const receipt = await Receipt.findByPk(req.params.id, {
+        include: [
+          { model: Tag }
+        ]
+      })
+      const tags = await Tag.findAll()
+      return callback({ receipt, tags })
+    } catch (err) {
+      console.log(err)
+      return callback({
+        status: 'error',
+        message: '發生錯誤'
+      })
+    }
   },
   async putReceipt (req, res, callback) {
     try {
