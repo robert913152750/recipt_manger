@@ -103,6 +103,9 @@ const receiptService = {
         message: '上傳失敗'
       })
     }
+  },
+  async getReceipts (req, res, callback) {
+
   }
 }
 
