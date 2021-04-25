@@ -103,6 +103,61 @@ const receiptService = {
         message: '上傳失敗'
       })
     }
+  },
+  async getReceipts (req, res, callback) {
+    try {
+      const pageLimit = 10
+      const UserId = Number(req.user.dataValues.id)
+      let offset = 0
+      const whereQuery = {}
+      let TagId = ''
+
+      if (req.query.page) {
+        offset = (req.query.page - 1) * pageLimit
+      }
+
+      if (req.query.TagId) {
+        TagId = req.query.TagId
+        whereQuery.TagId = TagId
+      }
+
+      const receipts = await Receipt.findAndCountAll({
+        include: [
+          { model: ReceiptGoods }
+        ],
+        where: [
+          { UserId: UserId }
+        ],
+        offset: offset,
+        limit: pageLimit
+      })
+      // const receipts = await Receipt.findAndCountAll()
+
+      const tags = await Tag.findAll()
+
+      const page = Number(req.query.page) || 1
+      const pages = Math.ceil(receipts.count / pageLimit)
+      const totalPage = Array.from({ length: pages }, (item, index) => index + 1)
+
+      const prev = page - 1 < 1 ? 1 : page - 1
+      const next = page + 1 > pages ? pages : page + 1
+
+      return callback({
+        receipts: receipts,
+        tags,
+        page,
+        TagId,
+        totalPage,
+        prev,
+        next
+      })
+    } catch (err) {
+      console.log(err)
+      return callback({
+        status: 'error',
+        message: 'something wrong'
+      })
+    }
   }
 }
 

@@ -5,6 +5,11 @@ const receiptController = {
     receiptService.uploadReceipt(req, res, (data) => {
       return res.json(data)
     })
+  },
+  getReceipts: (req, res) => {
+    receiptService.getReceipts(req, res, (data) => {
+      return res.json(data)
+    })
   }
 }
 
