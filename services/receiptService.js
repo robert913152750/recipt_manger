@@ -3,6 +3,7 @@ const moment = require('moment')
 const util = require('util')
 const promisify = util.promisify
 const db = require('../models')
+const { checkout } = require('../routes/apis')
 const Receipt = db.Receipt
 const ReceiptGoods = db.ReceiptGoods
 const Tag = db.Tag
@@ -265,7 +266,32 @@ const receiptService = {
     }
   },
   async deleteTag (req, res, callback) {
-
+    try {
+      const tag = await Tag.findByPk(req.params.id)
+      const receipts = await Receipt.findAll({
+        where: [
+          { TagId: req.params.id }
+        ]
+      })
+      let receiptHasConnect
+      for (let i = 0; i < receipts.length; i++) {
+        receiptHasConnect = await Receipt.findByPk(receipts[i].id)
+        receiptHasConnect.update({
+          TagId: null
+        })
+      }
+      await tag.destroy()
+      return callback({
+        status: 'success',
+        message: '刪除成功'
+      })
+    } catch (err) {
+      console.log(err)
+      return checkout({
+        status: 'error',
+        message: '刪除失敗'
+      })
+    }
   }
 
 }
