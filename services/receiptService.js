@@ -161,7 +161,12 @@ const receiptService = {
     }
   },
   async getReceipt (req, res, callback) {
-
+    const receipt = await Receipt.findByPk(req.params.id, {
+      include: [
+        { model: Tag }
+      ]
+    })
+    return callback({ receipt })
   }
 }
 
