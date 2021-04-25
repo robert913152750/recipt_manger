@@ -201,6 +201,19 @@ const receiptService = {
     try {
       const { tagName } = req.body
       const UserId = Number(req.user.dataValues.id)
+      const checkTagName = await Tag.findAll({
+        where: [
+          { name: tagName }
+        ]
+      })
+
+      if (checkTagName) {
+        return callback({
+          status: 'error',
+          message: '名稱重複'
+        })
+      }
+
       const tag = await Tag.create({
         name: tagName,
         UserId: UserId
@@ -220,6 +233,7 @@ const receiptService = {
       })
     }
   }
+
 }
 
 module.exports = receiptService
