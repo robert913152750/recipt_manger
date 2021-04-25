@@ -167,6 +167,27 @@ const receiptService = {
       ]
     })
     return callback({ receipt })
+  },
+  async putReceipt (req, res, callback) {
+    try {
+      const { TagId } = req.body
+      const receipt = await Receipt.findByPk(req.params.id)
+
+      await receipt.update({
+        TagId
+      })
+
+      return callback({
+        status: 'success',
+        message: '新增標籤成功'
+      })
+    } catch (err) {
+      console.log(err)
+      return callback({
+        status: 'error',
+        message: '更改失敗'
+      })
+    }
   }
 }
 
