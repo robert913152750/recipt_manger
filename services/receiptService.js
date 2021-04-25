@@ -51,9 +51,9 @@ const receiptService = {
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-            this.quantity = quantity,
-            this.amount = amount,
-            this.total = total
+          this.quantity = quantity,
+          this.amount = amount,
+          this.total = total
         }
       }
 
@@ -207,22 +207,20 @@ const receiptService = {
         ]
       })
 
-      if (checkTagName) {
+      if (checkTagName.length === 0) {
+        const tag = await Tag.create({
+          name: tagName,
+          UserId: UserId
+        })
         return callback({
-          status: 'error',
-          message: '名稱重複'
+          status: 'success',
+          message: '新增標籤成功',
+          tag
         })
       }
-
-      const tag = await Tag.create({
-        name: tagName,
-        UserId: UserId
-
-      })
       return callback({
-        status: 'success',
-        message: '新增標籤成功',
-        tag
+        status: 'error',
+        message: '名稱重複'
       })
     } catch (err) {
       console.log(err)
@@ -250,7 +248,8 @@ const receiptService = {
 
         return callback({
           status: 'success',
-          message: '修改成功'
+          message: '修改成功',
+          tag
         })
       }
       return callback({
