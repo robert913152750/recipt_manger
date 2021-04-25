@@ -10,6 +10,11 @@ const receiptController = {
     receiptService.getReceipts(req, res, (data) => {
       return res.json(data)
     })
+  },
+  getReceipt: (req, res) => {
+    receiptService.getReceipt(req, res, (data) => {
+      return res.json(data)
+    })
   }
 }
 

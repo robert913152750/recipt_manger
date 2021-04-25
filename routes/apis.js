@@ -14,6 +14,7 @@ const authenticated = passport.authenticate('jwt', { session: false })
 router.post('/signup', userController.signUp)
 router.post('/signin', userController.signIn)
 router.get('/home', authenticated, receiptController.getReceipts)
+router.get('/receipt/:id', authenticated, receiptController.getReceipt)
 router.post('/receipt', authenticated, upload.single('receipt'), receiptController.uploadReceipt)
 
 module.exports = router
