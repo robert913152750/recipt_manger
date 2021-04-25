@@ -197,6 +197,9 @@ const receiptService = {
         message: '更改失敗'
       })
     }
+  },
+  async postTag (req, res, callback) {
+
   }
 }
 
