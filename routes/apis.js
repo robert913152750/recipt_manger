@@ -3,6 +3,7 @@ const passport = require('../config/passport')
 const userController = require('../controller/api/userController')
 const receiptController = require('../controller/api/receiptController')
 const multer = require('multer')
+const receiptService = require('../services/receiptService')
 const upload = multer({ dest: 'temp/' })
 const router = express.Router()
 
@@ -18,5 +19,6 @@ router.post('/receipt', authenticated, upload.single('receipt'), receiptControll
 router.put('/receipt/:id', authenticated, receiptController.putReceipt)
 router.post('/tag', authenticated, receiptController.postTag)
 router.put('/tag/:id', authenticated, receiptController.putTag)
+router.delete('/tag/:id', authenticated, receiptController.deleteTag)
 
 module.exports = router

@@ -30,6 +30,11 @@ const receiptController = {
     receiptService.putTag(req, res, (data) => {
       return res.json(data)
     })
+  },
+  deleteTag: (req, res) => {
+    receiptService.deleteTag(req, res, (data) => {
+      return res.json(data)
+    })
   }
 }
 
