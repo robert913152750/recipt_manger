@@ -51,9 +51,9 @@ const receiptService = {
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-          this.quantity = quantity,
-          this.amount = amount,
-          this.total = total
+            this.quantity = quantity,
+            this.amount = amount,
+            this.total = total
         }
       }
 
@@ -167,6 +167,9 @@ const receiptService = {
       ]
     })
     return callback({ receipt })
+  },
+  async putReceipt (req, res, callback) {
+
   }
 }
 

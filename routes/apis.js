@@ -16,5 +16,6 @@ router.post('/signin', userController.signIn)
 router.get('/home', authenticated, receiptController.getReceipts)
 router.get('/receipt/:id', authenticated, receiptController.getReceipt)
 router.post('/receipt', authenticated, upload.single('receipt'), receiptController.uploadReceipt)
+router.put('/receipt/:id', authenticated, receiptController.putReceipt)
 
 module.exports = router
