@@ -51,9 +51,9 @@ const receiptService = {
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-            this.quantity = quantity,
-            this.amount = amount,
-            this.total = total
+          this.quantity = quantity,
+          this.amount = amount,
+          this.total = total
         }
       }
 
@@ -132,7 +132,6 @@ const receiptService = {
         offset: offset,
         limit: pageLimit
       })
-      // const receipts = await Receipt.findAndCountAll()
 
       const tags = await Tag.findAll()
 
@@ -195,6 +194,29 @@ const receiptService = {
       return callback({
         status: 'error',
         message: '更改失敗'
+      })
+    }
+  },
+  async postTag (req, res, callback) {
+    try {
+      const { tagName } = req.body
+      const UserId = Number(req.user.dataValues.id)
+      const tag = await Tag.create({
+        name: tagName,
+        UserId: UserId
+
+      })
+      return callback({
+        status: 'success',
+        message: '新增標籤成功',
+        tag
+      })
+    } catch (err) {
+      console.log(err)
+      return callback({
+        status: 'error',
+        message: '新增標籤失敗'
+
       })
     }
   }
