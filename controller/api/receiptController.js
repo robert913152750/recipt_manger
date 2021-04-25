@@ -25,6 +25,11 @@ const receiptController = {
     receiptService.postTag(req, res, (data) => {
       return res.json(data)
     })
+  },
+  putTag: (req, res) => {
+    receiptService.putTag(req, res, (data) => {
+      return res.json(data)
+    })
   }
 }
 
