@@ -51,9 +51,9 @@ const receiptService = {
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-          this.quantity = quantity,
-          this.amount = amount,
-          this.total = total
+            this.quantity = quantity,
+            this.amount = amount,
+            this.total = total
         }
       }
 
@@ -263,6 +263,9 @@ const receiptService = {
         message: '修改失敗'
       })
     }
+  },
+  async deleteTag (req, res, callback) {
+
   }
 
 }
