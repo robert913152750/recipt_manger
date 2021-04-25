@@ -234,7 +234,36 @@ const receiptService = {
     }
   },
   async putTag (req, res, callback) {
+    try {
+      const { tagName } = req.body
+      const checkTagName = await Tag.findAll({
+        where: [
+          { name: tagName }
+        ]
+      })
 
+      if (checkTagName.length === 0) {
+        const tag = await Tag.findByPk(req.params.id)
+        await tag.update({
+          name: tagName
+        })
+
+        return callback({
+          status: 'success',
+          message: '修改成功'
+        })
+      }
+      return callback({
+        status: 'error',
+        message: '名稱重複'
+      })
+    } catch (err) {
+      console.log(err)
+      return callback({
+        status: 'error',
+        message: '修改失敗'
+      })
+    }
   }
 
 }
