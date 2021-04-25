@@ -26,12 +26,13 @@ const receiptService = {
       const receiptGoodsInf = receipt.slice(receiptFirstLimitNumber + 1, receiptSecondLimitNumber)
       const receiptTotalAndGST = receipt.slice(receiptSecondLimitNumber + 1, receiptThirstLimitNumber)
 
-      let date = Date.parse(receiptBasicInf[4].split(' ')[0].split(':')[1])
+      let date = receiptBasicInf[4].split(' ')[0].split(':')[1].split('.')
+      let time = `${date[2]}.${date[1]}.${date[0]}` + ' ' + receiptBasicInf[4].split(' ')[2].split('Time:')[1]
+
+      date = Date.parse(`${date[2]}.${date[1]}.${date[0]}`)
       date = moment(date).format('YYYY-MM-DD')
 
-      let time = receiptBasicInf[4].split(' ')[0].split(':')[1] + ' ' + receiptBasicInf[4].split(' ')[2].split('Time:')[1]
       time = Date.parse(time)
-      time = date + ' ' + moment(time).format('HH:mm:ss')
       time = moment(time).format('YYYY-MM-DD HH:mm:ss')
 
       const receiptObject = {
