@@ -135,7 +135,11 @@ const receiptService = {
         limit: pageLimit
       })
 
-      const tags = await Tag.findAll()
+      const tags = await Tag.findAll({
+        where: [
+          { UserId: UserId }
+        ]
+      })
 
       const page = Number(req.query.page) || 1
       const pages = Math.ceil(receipts.count / pageLimit)
@@ -163,12 +167,23 @@ const receiptService = {
   },
   async getReceipt (req, res, callback) {
     try {
+      const UserId = Number(req.user.dataValues.id)
       const receipt = await Receipt.findByPk(req.params.id, {
         include: [
           { model: Tag }
         ]
       })
-      const tags = await Tag.findAll()
+      const tags = await Tag.findAll({
+        where: [
+          { UserId: UserId }
+        ]
+      })
+      if (receipt.UserId !== UserId) {
+        return callback({
+          status: 'error',
+          message: '權限不足'
+        })
+      }
       return callback({ receipt, tags })
     } catch (err) {
       console.log(err)
@@ -180,8 +195,16 @@ const receiptService = {
   },
   async putReceipt (req, res, callback) {
     try {
+      const UserId = Number(req.user.dataValues.id)
       const { TagId } = req.body
       const receipt = await Receipt.findByPk(req.params.id)
+
+      if (receipt.UserId !== UserId) {
+        return callback({
+          status: 'message',
+          message: '權限不足'
+        })
+      }
 
       await receipt.update({
         TagId
@@ -235,7 +258,17 @@ const receiptService = {
   },
   async putTag (req, res, callback) {
     try {
+      const UserId = Number(req.user.dataValues.id)
       const { tagName } = req.body
+      const tag = await Tag.findByPk(req.params.id)
+
+      if (tag.UserId !== UserId) {
+        return callback({
+          status: 'error',
+          message: '權限不足'
+        })
+      }
+
       const checkTagName = await Tag.findAll({
         where: [
           { name: tagName }
@@ -243,7 +276,6 @@ const receiptService = {
       })
 
       if (checkTagName.length === 0) {
-        const tag = await Tag.findByPk(req.params.id)
         await tag.update({
           name: tagName
         })
@@ -268,7 +300,16 @@ const receiptService = {
   },
   async deleteTag (req, res, callback) {
     try {
+      const UserId = Number(req.user.dataValues.id)
       const tag = await Tag.findByPk(req.params.id)
+
+      if (tag.UserId !== UserId) {
+        return callback({
+          status: 'error',
+          message: '權限不足'
+        })
+      }
+
       const receipts = await Receipt.findAll({
         where: [
           { TagId: req.params.id }
