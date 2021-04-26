@@ -23,7 +23,9 @@ module.exports = (sequelize, DataTypes) => {
     time: DataTypes.DATE,
     receipt_id: DataTypes.INTEGER,
     total: DataTypes.INTEGER,
-    gst_amount: DataTypes.INTEGER
+    gst_amount: DataTypes.INTEGER,
+    TagId: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Receipt'
