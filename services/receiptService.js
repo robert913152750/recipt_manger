@@ -52,9 +52,9 @@ const receiptService = {
       class Goods {
         constructor (name, quantity, amount, total) {
           this.name = name,
-          this.quantity = quantity,
-          this.amount = amount,
-          this.total = total
+            this.quantity = quantity,
+            this.amount = amount,
+            this.total = total
         }
       }
 
@@ -135,7 +135,11 @@ const receiptService = {
         limit: pageLimit
       })
 
-      const tags = await Tag.findAll()
+      const tags = await Tag.findAll({
+        where: [
+          { UserId: UserId }
+        ]
+      })
 
       const page = Number(req.query.page) || 1
       const pages = Math.ceil(receipts.count / pageLimit)
