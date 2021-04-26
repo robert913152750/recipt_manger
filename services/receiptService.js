@@ -167,12 +167,23 @@ const receiptService = {
   },
   async getReceipt (req, res, callback) {
     try {
+      const UserId = Number(req.user.dataValues.id)
       const receipt = await Receipt.findByPk(req.params.id, {
         include: [
           { model: Tag }
         ]
       })
-      const tags = await Tag.findAll()
+      const tags = await Tag.findAll({
+        where: [
+          { UserId: UserId }
+        ]
+      })
+      if (receipt.UserId !== UserId) {
+        return callback({
+          status: 'error',
+          message: '權限不足'
+        })
+      }
       return callback({ receipt, tags })
     } catch (err) {
       console.log(err)
